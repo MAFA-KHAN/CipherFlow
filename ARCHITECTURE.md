@@ -95,7 +95,7 @@ JSONL is streamable. Consumers can begin reading before the write completes,
 and the file remains valid if the process is killed mid-write.
 
 **Why sniff log type instead of requiring a flag?**  
-The assignment specifies automatic detection. The heuristic (pipe+equals →
+The pipeline specification specifies automatic detection. The heuristic (pipe+equals →
 DNS, commas → firewall, spaces → auth) is unambiguous for the given formats.
 
 **Why not Pandas / Polars?**  

@@ -142,4 +142,8 @@ python backend/log_parser.py backend/sample_logs/bulk/bulk_firewall_logs.csv bac
 
 ---
 
-*Powered by MAFA*
+---
+
+<div align="center">
+  <h3>Powered by MAFA</h3>
+</div>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CipherFlow — Security Log Processing &amp; Validation Pipeline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="error-overlay" style="display:none; padding: 24px; background: #2B0000; color: #FF8888; font-family: monospace; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; overflow: auto; border: 4px solid #FF3333;">
+      <h2 style="color: #FF3333; margin-top: 0;">[FATAL SYSTEM CRASH DETECTED]</h2>
+      <p style="color: #CCAFA9;">The application encountered an unhandled exception during browser runtime. Please copy the logs below:</p>
+      <hr style="border: 0; border-top: 1px solid #3F1717; margin: 16px 0;" />
+      <pre id="error-message" style="white-space: pre-wrap; font-size: 13px; line-height: 1.5; color: #FBECE8; background: #0B0707; padding: 16px; border: 1px solid #3F1717; border-radius: 4px;"></pre>
+    </div>
+    <script>
+      window.addEventListener('error', function(event) {
+        var overlay = document.getElementById('error-overlay');
+        var msg = document.getElementById('error-message');
+        if (overlay && msg) {
+          overlay.style.display = 'block';
+          msg.textContent = event.error ? (event.error.stack || event.error.message || event.error) : event.message;
+        }
+      });
+      window.addEventListener('unhandledrejection', function(event) {
+        var overlay = document.getElementById('error-overlay');
+        var msg = document.getElementById('error-message');
+        if (overlay && msg) {
+          overlay.style.display = 'block';
+          msg.textContent = 'Unhandled promise rejection: ' + event.reason;
+        }
+      });
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

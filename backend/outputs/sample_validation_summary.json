@@ -1,0 +1,13 @@
+{
+  "total_records": 25,
+  "clean_records": 25,
+  "flagged_records": 0,
+  "quality_score_pct": 100.0,
+  "issue_breakdown": {},
+  "records_by_type": {
+    "firewall": 9,
+    "auth": 9,
+    "dns": 7
+  },
+  "flagged_events": []
+}

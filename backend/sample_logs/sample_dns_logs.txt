@@ -1,0 +1,8 @@
+query_time=2026-07-15T10:23:45Z|client=192.168.1.50|domain=update.cdn-net.io|type=A|response=NOERROR
+query_time=2026-07-15T10:24:02Z|client=192.168.1.51|domain=telemetry.hostbeacon.ru|type=A|response=NXDOMAIN
+query_time=2026-07-15T10:24:19Z|client=192.168.1.44|domain=auth.corp-vault.com|type=A|response=NOERROR
+query_time=2026-07-15T10:25:03Z|client=10.0.0.5|domain=mail.zenithcorp.com|type=MX|response=NOERROR
+query_time=2026-07-15T10:26:15Z|client=192.168.1.60|domain=api.paylinq.io|type=A|response=SERVFAIL
+query_time=2026-07-15T10:27:40Z|client=203.0.113.9|domain=telemetry.hostbeacon.ru|type=A|response=NXDOMAIN
+query_time=2026-07-15T10:28:55Z|client=badclient|domain=malformed.example.com|type=A|response=NOERROR
+query_time=2026-07-15T10:29:31Z|client=10.0.0.6|domain=update.cdn-net.io|type=A|response=NOERROR

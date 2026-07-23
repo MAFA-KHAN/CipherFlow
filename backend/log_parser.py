@@ -27,8 +27,8 @@ from typing import Optional
 # Constants
 # --------------------------------------------------------------------------- #
 
-FIREWALL_ACTIONS = {"ALLOWED", "BLOCKED", "DROPPED"}
-AUTH_STATUSES = {"SUCCESS", "FAILED", "LOCKED"}
+FIREWALL_ACTIONS = {"ALLOW", "DENY"}
+AUTH_STATUSES = {"SUCCESS", "FAILURE"}
 DNS_RESPONSES = {"NOERROR", "NXDOMAIN", "SERVFAIL", "REFUSED"}
 
 SCHEMA_FIELDS = [
@@ -42,8 +42,8 @@ SCHEMA_FIELDS = [
 # --------------------------------------------------------------------------- #
 
 def generate_event_id() -> str:
-    """Return a short, unique identifier for a normalized event."""
-    return f"evt_{uuid.uuid4().hex[:10]}"
+    """Return a real UUID4 string for a normalized event."""
+    return str(uuid.uuid4())
 
 
 def current_timestamp() -> str:
@@ -139,13 +139,15 @@ def parse_firewall(lines: list[str]) -> list[dict]:
             continue
 
         fields = [f.strip() for f in line.split(",")]
-        if len(fields) < 5:
+        if len(fields) < 6:
             print(f"[WARNING] Skipping malformed firewall line: {line!r}")
             continue
 
-        raw_ts, source_ip, dest_ip, protocol, action = fields[:5]
+        raw_ts, source_ip, dest_ip, port, action, bytes_transferred = fields[:6]
         timestamp = normalize_timestamp(raw_ts)
         action = action.upper()
+        if action not in FIREWALL_ACTIONS:
+            action = "DENY" if action in ("BLOCKED", "DROPPED") else "ALLOW"
 
         if not validate_ip(source_ip):
             print(f"[WARNING] Invalid source IP, skipping: {line!r}")
@@ -160,8 +162,8 @@ def parse_firewall(lines: list[str]) -> list[dict]:
             "source_ip": source_ip,
             "target_ip": dest_ip if validate_ip(dest_ip) else None,
             "user": None,
-            "action": f"{protocol.upper()}_CONNECT",
-            "status": action if action in FIREWALL_ACTIONS else action,
+            "action": action,
+            "status": "success",
             "log_type": "firewall",
             "original_line": line,
             "parsed_at": current_timestamp(),
@@ -187,13 +189,16 @@ def parse_auth(lines: list[str]) -> list[dict]:
             continue
 
         fields = line.split()
-        if len(fields) < 5:
+        if len(fields) < 6:
             print(f"[WARNING] Skipping malformed auth line: {line!r}")
             continue
 
-        raw_ts, username, source_ip, action, status = fields[:5]
+        raw_date, raw_time, username, host, status, source_ip = fields[:6]
+        raw_ts = f"{raw_date} {raw_time}"
         timestamp = normalize_timestamp(raw_ts)
         status = status.upper()
+        if status not in AUTH_STATUSES:
+            status = "FAILURE" if status in ("FAILED", "LOCKED") else "SUCCESS"
 
         if not validate_ip(source_ip):
             print(f"[WARNING] Invalid source IP, skipping: {line!r}")
@@ -208,7 +213,7 @@ def parse_auth(lines: list[str]) -> list[dict]:
             "source_ip": source_ip,
             "target_ip": None,
             "user": username,
-            "action": action.upper(),
+            "action": "LOGIN",
             "status": status,
             "log_type": "auth",
             "original_line": line,

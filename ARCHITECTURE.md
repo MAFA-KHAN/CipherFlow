@@ -1,6 +1,6 @@
 # CipherFlow — Design Memo
 
-**Author:** CipherFlow Engineering  
+ 
 **Date:** 2026-07-23  
 **Status:** Final
 

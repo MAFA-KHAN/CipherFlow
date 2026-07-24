@@ -15,7 +15,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -498,3 +498,38 @@ def event(event_id: str):
         if r.get("event_id") == event_id:
             return r
     raise HTTPException(status_code=404, detail="Event not found")
+
+
+# --------------------------------------------------------------------------- #
+# WebSocket — Live Stats Stream
+# --------------------------------------------------------------------------- #
+
+@app.websocket("/ws")
+async def websocket_live_stats(ws: WebSocket):
+    """
+    Pushes a live snapshot of stats + latest notifications to every connected
+    client on a 2-second interval.  The frontend can open a single persistent
+    connection instead of polling multiple REST endpoints.
+    """
+    await ws.accept()
+    try:
+        while True:
+            data = list(RECORDS)
+            by_type = Counter(r.get("log_type", "unknown") for r in data)
+            bad_statuses = {"blocked", "dropped", "failed", "locked", "nxdomain", "servfail", "refused"}
+            flagged = sum(1 for r in data if str(r.get("status", "")).lower() in bad_statuses)
+
+            payload = {
+                "type": "stats",
+                "total_events": len(data),
+                "flagged_events": flagged,
+                "quality_score_pct": REPORT.get("quality_score_pct", 100.0),
+                "by_type": dict(by_type),
+                "simulation_speed": SETTINGS.get("simulation_speed"),
+                "active_attack": SETTINGS.get("active_attack"),
+                "latest_notifications": NOTIFICATIONS[:5],
+            }
+            await ws.send_json(payload)
+            await asyncio.sleep(2.0)
+    except WebSocketDisconnect:
+        pass

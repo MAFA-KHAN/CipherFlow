@@ -17,8 +17,8 @@ CipherFlow is a high-performance security data engineering pipeline and monitori
 ## 🚀 Key Features
 
 - **Multi-Format Log Normalization**: Automatically detects and parses heterogeneous security logs (Firewall, Authentication, and DNS) into a standardized, easily queryable ISO-8601 JSONL schema.
-- **Real-Time Data Quality Validation**: Ensures data integrity by running 5 critical checks (missing fields, invalid IPs, timestamp anomalies, unrecognized types, duplicate event IDs) and generates detailed compliance reports.
-- **WebSocket Streaming**: A FastAPI backend that streams normalized log data and quality notifications to connected clients instantly.
+- **Real-Time Data Quality Validation**: Ensures data integrity by running 5 modular checks (missing fields, IP validation with private-IP flagging, timestamp anomalies, duplicate detection, and suspicious pattern analysis) and generates detailed compliance reports.
+- **Live Stats WebSocket (`/ws`)**: A persistent WebSocket endpoint pushes live event counts, quality scores, and notifications to connected clients every 2 seconds — no polling required.
 - **Midnight Crimson Dashboard**: A premium, responsive React/Vite dashboard featuring glassmorphism design, real-time risk gauges, and unified event tables.
 - **High-Throughput Processing**: Optimized core parser capable of processing >40,000 records/sec on standard consumer hardware.
 - **Extensible Architecture**: Designed with modularity in mind, allowing seamless integration of new log sources and downstream SIEM integrations.
@@ -29,12 +29,12 @@ CipherFlow is a high-performance security data engineering pipeline and monitori
 
 ```mermaid
 graph TD
-    A[Raw Logs<br/>.csv / .txt] -->|Ingest| B(log_parser.py)
+    A["Raw Logs<br/>.csv / .txt"] -->|Ingest| B(log_parser.py)
     B -->|Normalize & Extract| C[Unified JSON Schema]
     C -->|Batch CLI| D(quality_validator.py)
-    C -->|Real-Time| E[FastAPI WebSocket]
-    E -->|Stream| F[React Dashboard]
-    D -->|Audit| G[Quality Reports<br/>.json / .csv]
+    C -->|Startup Load| E[FastAPI In-Memory Store]
+    E -->|REST Poll / WebSocket /ws| F[React Dashboard]
+    D -->|Audit| G["Quality Reports<br/>.json / .csv"]
 ```
 
 ---
@@ -88,7 +88,7 @@ cd CipherFlow
 ```
 
 ### 2. Start the Backend Server
-The FastAPI backend serves the REST endpoints and WebSocket connections.
+The FastAPI backend serves REST endpoints and a live-streaming WebSocket (`/ws`) that pushes stats every 2 seconds.
 ```bash
 cd backend
 pip install -r requirements.txt

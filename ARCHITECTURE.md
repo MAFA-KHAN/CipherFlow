@@ -1,4 +1,4 @@
-# CipherFlow — Design Memo
+# CipherFlow — System Architecture
 
  
 **Date:** 2026-07-23  

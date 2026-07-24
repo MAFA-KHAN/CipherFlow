@@ -1,13 +1,57 @@
 {
-  "total_records": 25,
-  "clean_records": 25,
-  "flagged_records": 0,
-  "quality_score_pct": 100.0,
-  "issue_breakdown": {},
+  "total_records": 27,
+  "clean_records": 22,
+  "flagged_records": 5,
+  "quality_score_pct": 81.48,
+  "issue_breakdown": {
+    "private_ip_in_external_log": 5
+  },
   "records_by_type": {
-    "firewall": 9,
-    "auth": 9,
+    "firewall": 10,
+    "auth": 10,
     "dns": 7
   },
-  "flagged_events": []
+  "duplicate_map": {},
+  "flagged_events": [
+    {
+      "event_id": "04574bb0-685f-4bf5-a4ac-4013d69be92a",
+      "line_number": 1,
+      "log_type": "firewall",
+      "issues": [
+        "private_ip_in_external_log"
+      ]
+    },
+    {
+      "event_id": "752b548f-4a4f-4354-a995-65b01fb33966",
+      "line_number": 2,
+      "log_type": "firewall",
+      "issues": [
+        "private_ip_in_external_log"
+      ]
+    },
+    {
+      "event_id": "959e9d39-94ec-499b-9a49-fd4f1b600513",
+      "line_number": 3,
+      "log_type": "firewall",
+      "issues": [
+        "private_ip_in_external_log"
+      ]
+    },
+    {
+      "event_id": "db95064e-2f15-41c4-8ce5-3d70fe5de32d",
+      "line_number": 8,
+      "log_type": "firewall",
+      "issues": [
+        "private_ip_in_external_log"
+      ]
+    },
+    {
+      "event_id": "0b3704a9-13d4-4ad1-8d6c-2028bed9b110",
+      "line_number": 10,
+      "log_type": "firewall",
+      "issues": [
+        "private_ip_in_external_log"
+      ]
+    }
+  ]
 }

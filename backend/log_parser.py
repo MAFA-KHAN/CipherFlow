@@ -47,8 +47,8 @@ def generate_event_id() -> str:
 
 
 def current_timestamp() -> str:
-    """Return the current UTC time in ISO-8601 format."""
-    return datetime.now(timezone.utc).isoformat()
+    """Return the current UTC time in ISO-8601 Z format."""
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def normalize_timestamp(raw: Optional[str]) -> Optional[str]:
@@ -71,7 +71,7 @@ def normalize_timestamp(raw: Optional[str]) -> Optional[str]:
             dt = datetime.strptime(raw, fmt)
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=timezone.utc)
-            return dt.astimezone(timezone.utc).isoformat()
+            return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         except ValueError:
             continue
     return None
@@ -163,7 +163,7 @@ def parse_firewall(lines: list[str]) -> list[dict]:
             "target_ip": dest_ip if validate_ip(dest_ip) else None,
             "user": None,
             "action": action,
-            "status": "success",
+            "status": "success" if action == "ALLOW" else "failure",
             "log_type": "firewall",
             "original_line": line,
             "parsed_at": current_timestamp(),

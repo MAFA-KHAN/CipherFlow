@@ -52,8 +52,8 @@ def test_parse_dns():
 
 
 def test_normalize_timestamp():
-    assert normalize_timestamp("2026-07-15T10:15:22Z") == "2026-07-15T10:15:22+00:00"
-    assert normalize_timestamp("2026-07-15 10:23:45") == "2026-07-15T10:23:45+00:00"
+    assert normalize_timestamp("2026-07-15T10:15:22Z") == "2026-07-15T10:15:22Z"
+    assert normalize_timestamp("2026-07-15 10:23:45") == "2026-07-15T10:23:45Z"
     assert normalize_timestamp("not-a-timestamp") is None
 
 

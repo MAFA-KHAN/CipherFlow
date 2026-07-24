@@ -1,0 +1,6 @@
+line_number,check_type,severity,description,recommended_action
+1,private_ip_in_external_log,WARNING,Event 04574bb0-685f-4bf5-a4ac-4013d69be92a issue: private_ip_in_external_log,Verify IP extraction regex or network topology
+2,private_ip_in_external_log,WARNING,Event 752b548f-4a4f-4354-a995-65b01fb33966 issue: private_ip_in_external_log,Verify IP extraction regex or network topology
+3,private_ip_in_external_log,WARNING,Event 959e9d39-94ec-499b-9a49-fd4f1b600513 issue: private_ip_in_external_log,Verify IP extraction regex or network topology
+8,private_ip_in_external_log,WARNING,Event db95064e-2f15-41c4-8ce5-3d70fe5de32d issue: private_ip_in_external_log,Verify IP extraction regex or network topology
+10,private_ip_in_external_log,WARNING,Event 0b3704a9-13d4-4ad1-8d6c-2028bed9b110 issue: private_ip_in_external_log,Verify IP extraction regex or network topology
